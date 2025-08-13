@@ -1,0 +1,557 @@
+%% Beginning of file 'sample631.tex'
+%%
+%% Modified 2022 May  
+%%
+%% This is a sample manuscript marked up using the
+%% AASTeX v6.31 LaTeX 2e macros.
+%%
+%% AASTeX is now based on Alexey Vikhlinin's emulateapj.cls 
+%% (Copyright 2000-2015).  See the classfile for details.
+
+%% AASTeX requires revtex4-1.cls and other external packages such as
+%% latexsym, graphicx, amssymb, longtable, and epsf.  Note that as of 
+%% Oct 2020, APS now uses revtex4.2e for its journals but remember that 
+%% AASTeX v6+ still uses v4.1. All of these external packages should 
+%% already be present in the modern TeX distributions but not always.
+%% For example, revtex4.1 seems to be missing in the linux version of
+%% TexLive 2020. One should be able to get all packages from www.ctan.org.
+%% In particular, revtex v4.1 can be found at 
+%% https://www.ctan.org/pkg/revtex4-1.
+
+\documentclass[preprint2,linenumbers]{aastex701}
+
+%% The default is a single spaced, 10 point font, single spaced article.
+%% There are 5 other style options available via an optional argument. They
+%% can be invoked like this:
+%%
+%% \documentclass[arguments]{aastex631}
+%% 
+%% where the layout options are:
+%%
+%%  twocolumn   : two text columns, 10 point font, single spaced article.
+%%                This is the most compact and represent the final published
+%%                derived PDF copy of the accepted manuscript from the publisher
+%%  manuscript  : one text column, 12 point font, double spaced article.
+%%  preprint    : one text column, 12 point font, single spaced article.  
+%%  preprint2   : two text columns, 12 point font, single spaced article.
+%%  modern      : a stylish, single text column, 12 point font, article with
+%% 		  wider left and right margins. This uses the Daniel
+%% 		  Foreman-Mackey and David Hogg design.
+%%  RNAAS       : Supresses an abstract. Originally for RNAAS manuscripts 
+%%                but now that abstracts are required this is obsolete for
+%%                AAS Journals. Authors might need it for other reasons. DO NOT
+%%                use \begin{abstract} and \end{abstract} with this style.
+%%
+%% Note that you can submit to the AAS Journals in any of these 6 styles.
+%%
+%% There are other optional arguments one can invoke to allow other stylistic
+%% actions. The available options are:
+%%
+%%   astrosymb    : Loads Astrosymb font and define \astrocommands. 
+%%   tighten      : Makes baselineskip slightly smaller, only works with 
+%%                  the twocolumn substyle.
+%%   times        : uses times font instead of the default
+%%   linenumbers  : turn on lineno package.
+%%   trackchanges : required to see the revision mark up and print its output
+%%   longauthor   : Do not use the more compressed footnote style (default) for 
+%%                  the author/collaboration/affiliations. Instead print all
+%%                  affiliation information after each name. Creates a much 
+%%                  longer author list but may be desirable for short 
+%%                  author papers.
+%% twocolappendix : make 2 column appendix.
+%%   anonymous    : Do not show the authors, affiliations and acknowledgments 
+%%                  for dual anonymous review.
+%%
+%% these can be used in any combination, e.g.
+%%
+%% \documentclass[twocolumn,linenumbers,trackchanges]{aastex631}
+%%
+%% AASTeX v6.* now includes \hyperref support. While we have built in specific
+%% defaults into the classfile you can manually override them with the
+%% \hypersetup command. For example,
+%%
+%% \hypersetup{linkcolor=red,citecolor=green,filecolor=cyan,urlcolor=magenta}
+%%
+%% will change the color of the internal links to red, the links to the
+%% bibliography to green, the file links to cyan, and the external links to
+%% magenta. Additional information on \hyperref options can be found here:
+%% https://www.tug.org/applications/hyperref/manual.html#x1-40003
+%%
+%% Note that in v6.3 "bookmarks" has been changed to "true" in hyperref
+%% to improve the accessibility of the compiled pdf file.
+%%
+%% If you want to create your own macros, you can do so
+%% using \newcommand. Your macros should appear before
+%% the \begin{document} command.
+%%
+\defcitealias{2023_Vesa}{Paper\,I}
+\newcommand{\IBISCa}[1]{Ca\,{\sc ii}\,8542}
+\newcommand{\HMI}[1]{Fe\,{\sc i}\,6173}
+\newcommand{\IBISFeLowerPhot}[1]{Fe\,{\sc i}\,7090}
+\newcommand{\IBISFeUpperPhot}[1]{Fe\,{\sc i}\,5434}
+\newcommand{\IBISK}[1]{K\,{\sc i}\,7699}
+\newcommand{\DeubnerCi}[1]{C\,{\sc i}\,5380}
+\newcommand{\DeubnerTi}[1]{Ti\,{\sc ii}\,5381}
+\newcommand{\DeubnerNa}[1]{Na\,{\sc i\,D$_{1}$}\,5896}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{url}
+\usepackage{amsmath}
+\DeclareCaptionFormat{cont}{#1 (cont.)#2#3\par}
+%% Reintroduced the \received and \accepted commands from AASTeX v5.2
+%\received{March 1, 2021}
+%\revised{April 1, 2021}
+%\accepted{\today}
+
+%% Command to document which AAS Journal the manuscript was submitted to.
+%% Adds "Submitted to " the argument.
+%\submitjournal{PSJ}
+
+%% The following command can be used to set the latex table counters.  It
+%% is needed in this document because it uses a mix of latex tabular and
+%% AASTeX deluxetables.  In general it should not be needed.
+%\setcounter{table}{1}
+\usepackage{gensymb}
+
+\graphicspath{{./}{Figures/}}
+
+\begin{document}
+
+\title{Atmospheric Gravity Waves Modulated by the Magnetic Field Topology}
+
+\correspondingauthor{Oana Vesa} 
+
+\author[orcid=0000-0001-6754-1520,gname=Oana,sname=Vesa]{Oana Vesa}
+\affiliation{W. W. Hansen Experimental Physics Laboratory, Stanford University}
+\email[show]{ovesa@stanford.edu}  
+
+\author[orcid=0000-0001-7525-7423,gname=Julio,sname=Morales]{Julio Morales}
+\affiliation{Department of Astronomy, New Mexico State University}
+\email{jmmorale@nmsu.edu}
+
+\author[orcid=0000-0001-9659-7486, gname=Jason,sname=Jackiewicz]{Jason Jackiewicz}
+\affiliation{Department of Astronomy, New Mexico State University}
+\email{jasonj@nmsu.edu}
+
+\author[orcid=0000-0002-9820-9114, gname=Gangadharan,sname=Vigeesh]{Gangadharan Vigeesh}
+\affiliation{Kiepenheuer-Institut für Sonnenphysik}
+\email{vigeesh@leibniz-kis.de}
+
+\author[orcid=0000-0001-8016-0001, gname=Kevin,sname=Reardon]{Kevin Reardon}
+\affiliation{National Solar Observatory}
+\email{kreardon@nso.edu}
+
+\shortauthors{Vesa et al.}
+\shorttitle{AGWs and Magnetic Fields}
+ 
+\begin{abstract}  % 250 words max
+Atmospheric gravity waves (AGWs) are buoyancy-driven waves excited by turbulent convection and contribute to the dynamics and energy transport of the lower solar atmosphere. We present high-resolution, multi-wavelength observations from the Interferometric Bidimensional Spectrometer and the Solar Dynamics Observatory to investigate AGW behavior across different viewing geometries and magnetic field topologies. Using Fourier spectral analysis to compute phase differences and coherence spectra, we detect the signature of upward propagating AGWs at temporal and spatial scales consistent with theory, simulations, and prior observations. Although AGW behavior is modulated by the magnetic field topology, particularly the field inclination, these effects are not discernible in our observed $k_{\rm{h}}-\nu$ phase difference diagrams. After filtering to isolate the AGW regime, we compute temporally averaged, spatially resolved phase differences weighted by the coherence and examine binned phase differences weighted by the coherence as functions of the magnetic field strength and inclination. Our results show that AGWs are efficiently suppressed in intermediate to strong, vertically oriented fields in the upper photosphere, while they propagate rather freely in QS and transverse fields. These findings agree with a simulated vertical 100\,G field using CO$^{5}$BOLD. Simulated $k_{\rm{h}}-\nu$ phase differences derived from a 3D magnetohydrodynamic dispersion relation also qualitatively agree with observations and reinforce that the magnetic field topology modulates the propagation of AGWs. This work demonstrates the potential of AGWs as magneto-seismology diagnostics for probing average magnetic field properties in the lower solar atmosphere.
+% We investigate whether magnetized dispersion relations can account for the qualitative features observed in the $k_{\rm{h}}-\nu$ phase difference diagrams and comment on their potential to infer average magnetic field properties.
+% This work demonstrates the potential of AGWs as magneto-seismology probes of the average magnetic field in the lower solar atmosphere.
+\end{abstract}
+
+
+\keywords{\uat{Solar photosphere}{1518}, \uat{Solar oscillations}{1515}, \uat{Solar atmosphere}{1477}, \uat{Solar physics}{1476}}
+
+
+\section{Introduction} \label{sec:intro}
+
+The solar atmosphere is replete with oscillations of various spatio-temporal scales, including atmospheric gravity waves (AGWs).
+AGWs are low-frequency (1--4\,mHz), buoyancy-driven waves copiously generated by turbulent convection in the stably stratified atmosphere \citep{1967_Lighthill, 1967_Stein}.
+Propagating at an oblique angle throughout the lower solar atmosphere, they are expected to reach low to mid-chromospheric heights \citep{1981_Mihalas_Toomre, 1982_Mihalas_Toomre} and impart energy comparable to the chromospheric radiative losses \citep{2008_Straus_Fleck_Jeffries_etal, 2009_Straus_Fleck_Jeffries_Severino_Steffen_Tarbell}.
+
+Observational evidence of AGWs dates back to the 1960s and 1970s with analysis of velocity and intensity fluctuations alluding to their presence at low frequencies and moderate horizontal wavenumbers \citep{1968_Frazier2, 1974_Deubner}.
+Subsequent phase analysis of ground- and space-based observations taken primarily near quiet-Sun (QS) disk center have unambiguously shown the signature of propagating AGWs carrying energy upward at the expected temporal and spatial scales \citep[e.g.,][]{1989_Deubner_Fleck, 2023_Kumar_Jumar_Rajaguru_Mathew_Bayanna}, corroborating numerical simulations and synthesized observations \citep[e.g.,][]{2017_Vigeesh, 2020_Vigeesh_Roth}, numerical models \citep[e.g.,][]{2009_Newington_Cally, 2016_Hague_Erdelyi}, and linear theory \citep[e.g.,][]{1981_Mihalas_Toomre, 1982_Mihalas_Toomre}.
+In all of these observations, a key characteristic of propagating AGWs carrying energy upward is noted: phase and group velocities are nearly orthogonal, with the vertical component of the energy (group velocity) propagating in the opposite direction to the vertical phase velocity \citep{1960_Hines}.
+
+As magnetic fields of various spatio-temporal scales pervade the solar atmosphere, interactions with AGWs are highly probable and have garnered considerable attention in recent years \citep[e.g.,][]{2011_Newington_Cally, 2020_Vigeesh_Roth, 2023_Kumar_Jumar_Rajaguru_Mathew_Bayanna}.
+The earliest discussion on this topic can be traced to \citet{1967_Lighthill}, who theorized that AGWs can efficiently transform into Alfv\'{e}n waves at higher atmospheric heights in an inclined magnetic field topology.
+Theoretical work by \citet{1974_Stein_Leibacher} also suggested that magnetic fields could suppress the propagation of AGWs with large horizontal wavenumbers.
+
+In-depth investigations into the influence of magnetic fields on AGWs began with early observational work by \citet{2008_Straus_Fleck_Jeffries_etal} who suggested magnetic suppression and possible mode conversion into Alfv\'{e}n waves.
+Subsequent numerical models confirmed that even weak vertical ($B = 10$\,G) or inclined magnetic fields can significantly alter their behavior, reflecting them as slow magnetoacoustic waves well below the plasma-$\beta=1$ level or facilitating mode conversion depending on the field geometry \citep{2009_Newington_Cally, 2011_Newington_Cally, 2016_Hague_Erdelyi}.
+Realistic numerical simulations of the solar atmosphere further demonstrated that strong vertical fields suppress AGW propagation in the upper photosphere while horizontal fields permit their transmission to chromospheric heights \citep{2017_Vigeesh, 2019_Vigeesh_Roth_Steiner_Jackiewicz, 2021_Vigeesh_Roth_Steiner_Fleck}.
+However, recent synthetic observations suggest that the effects of magnetic fields on AGWs remain challenging to detect observationally \citep{2020_Vigeesh_Roth}.
+
+Overall, the properties of AGWs remain empirically under-constrained due to limited observations across varying viewing geometries and magnetic field configurations. 
+Their strong horizontal velocity components make limb observations particularly advantageous \citep{1981_Mihalas_Toomre}.
+Numerical simulations also affirm their diagnostic potential for probing average QS magnetic fields in the upper photosphere, an atmospheric region accessible with observations by the Interferometric BIdimensional Spectrometer\,\citep[IBIS;][]{Cavallini_IBIS}.
+
+In \citet[][hereafter \citetalias{2023_Vesa}]{2023_Vesa}, we explored the behavior of AGWs throughout the lower solar atmosphere in a QS region observed near disk center ($\mu$ = 0.99).
+Propagating AGWs carrying energy upward were detected at the expected spatial and temporal scales using simultaneously observed line core Doppler velocity and line minimum intensity fluctuations.
+To facilitate direct comparisons between the properties of AGWs seen at QS disk center, toward the QS limb, and in varying magnetic field topologies, we follow the methodology in \citetalias{2023_Vesa}.
+
+
+This work is structured as follows.
+Datasets and simulation properties are described in Sect.\,\ref{sec:data}.
+Results and analysis are in Sect.\,\ref{sec:results}.
+The discussion and conclusions follow in Sects.\,\ref{sec:discussion}--\,\ref{sec:conclusion}.
+
+\section{Dataset Properties} \label{sec:data}
+
+\subsection{Observations} \label{subsec:observations}
+\begin{figure*}[ht!]
+    \centering
+    \includegraphics[width=\linewidth]{Figures/Paper2_reference_im.png}
+    \caption{Co-spatial and co-temporal snapshots of the observations taken on 26 April 2019 (DS1), 06 May 2019 (DS2), 08 May 2019 (DS3), and 09 May 2019 (DS4). First Panel: HMI line-of-sight magnetogram showing the lower photospheric magnetic field. Second Panel: HMI SHARP magnetic field inclination, where transverse fields are shown in white. Third Panel: Intensity blue wing of \IBISFeLowerPhot{} sampling the low photosphere. Fourth Panel: Intensity line core of \IBISCa{} sampling the middle chromosphere.}
+    \label{fig:AGW2_reference_image}
+\end{figure*}
+
+We present four high-resolution, multi-wavelength observations acquired in April and May 2019, taken at different viewing angles and magnetic field environments.
+The datasets are as follows: 1) QS region near the west limb ($\mu$ = 0.57) for 3\,hr starting at 15:24:06\,UT on 26 April 2019; 2) AR near the east limb ($\mu$ = 0.64) for 3.7\,hr starting at 14:34:40\,UT on 06 May 2019; 3) AR off disk center ($\mu$ = 0.88) for 3.6\,hr starting at 13:58:30\,UT on 08 May 2019; and 4) AR slightly off disk center ($\mu$ = 0.95) for 3.7\,hr starting at 15:37:08\,UT on 09 May 2019.
+The datasets have a cadence of $\approx$\,16\,s and will be referred to herein as DS1, DS2, DS3, and DS4, respectively.
+Co-spatial and co-temporal contextual snapshots are presented in Fig.\,\ref{fig:AGW2_reference_image}.
+
+\input{Tables/spectral_line_properties}
+
+These observations were acquired with IBIS, which was installed at the Dunn Solar Telescope (DST)\footnote[1]{\href{https://sunspot.solar/about/}{https://sunspot.solar/about/}} in Sunspot, New Mexico, in conjunction with the DST's high-order adaptive optics system \citep{2004_Rimmele_Richards_AO}. 
+The absorption line profiles of \IBISFeLowerPhot{}, \IBISK{}, \IBISFeUpperPhot{}, and \IBISCa{} were sampled with a spatial sampling of 0{\farcs}096\,pixel$^{-1}$.
+Table\,\ref{tab:dataset_and_spectral_line_properties} shows properties of the observed spectral lines, including the cadence and time delay between sequential sampling of the absorption line cores. 
+
+These datasets are complemented by co-aligned space-based data from the Helioseismic and Magnetic Imager\,\citep[HMI;][]{HMI_instrumental} on board the Solar Dynamics Observatory\,\citep[SDO;][]{SDO_2012}.
+HMI line-of-sight magnetograms and Dopplergrams were obtained using Rob Rutten's SDO alignment IDL package\footnote[2]{\href{https://robrutten.nl/Recipes_IDL.html}{https://robrutten.nl/Recipes\_IDL.html}}.
+The data have a spatial sampling of 0{\farcs}6\,pixel$^{-1}$ and cadence of 12.0\,s.
+In addition, DS2, DS3, and DS4 had corresponding Space-weather HMI Active Region Patches \citep[SHARPs;][]{2014_Hoeksema, 2014_Bobra}, which provided 720\,s magnetogram, field inclination, and field azimuth data products with a spatial sampling of 0{\farcs}5\,pixel$^{-1}$.
+
+The data reduction for the IBIS observables, calculation of the line core Doppler velocities, accounting for the time delay between sampling, and rebinning process for both IBIS and HMI data to match (0{\farcs}6\,pixel$^{-1}$) were carried out following the methods described in \citetalias{2023_Vesa}.
+Before the spatial interpolation, IBIS datasets had a Nyquist frequency of 30.5\,mHz, Nyquist wavenumber of 45.1\,Mm$^{-1}$, and wavenumber resolution of 0.09\,Mm$^{-1}$.
+After the spatial interpolation, the datasets had a Nyquist wavenumber of 7.2\,Mm$^{-1}$ and wavenumber resolution of 0.09\,Mm$^{-1}$.
+The frequency resolution is as follows: 90.2\,$\mu$Hz for DS1, 74.4\,$\mu$Hz for DS2, 76.3\,$\mu$Hz for DS3, and 74.4\,$\mu$Hz for DS4.
+
+\subsubsection{Data Properties} \label{subsubsec:data_properties}
+\input{Tables/magnetic_field_info}
+
+Contextual information on the magnetic field for each dataset can be found in Table\,\ref{tab:magnetic_field_information} and Fig.\,\ref{fig:AGW2_reference_image}.
+DS1, taken near the west limb, is focused on a small pore ($\approx$1{\arcsec}), or ``micropore'' \citep{2019_Solovev_Parfinenko_Efremov_et_al}, surrounded by a bright rim that persists throughout the observations.
+While the micropore has a median magnetic field value of 18\,G, we measure an unsigned magnetic field ($|B_{LOS}|$) RMS value of 12\,G and a median value of 5\,G for the entire field of view.
+Therefore, it is comparable to the QS region in \citetalias{2023_Vesa} (DS0).
+DS2, DS3, and DS4 are focused on active region (AR) 12740 during different evolutionary stages (and thus magnetic environments).
+DS2 has the strongest average magnetic field with a $|B_{LOS}|$ RMS value of 239\,G, while DS4 has a $|B_{LOS}|$ RMS value of 120\,G.
+Both sunspots and plage regions are largely associated with strong, vertically inclined fields \citep{2011_Borrero_Ichimoto, 2020_Pietrow_Kiselman_etal}, as seen in Fig.\,\ref{fig:AGW2_reference_image}.
+
+\begin{figure*}[hbt!]
+\centering
+\includegraphics[width=\linewidth]{Figures/velocity_amplitudes.png}
+\caption{Velocity amplitude spectral density profiles for IBIS and HMI (\HMI{}) at a horizontal wavenumber cut of 2.0\,Mm$^{-1}$. The AGW regime at low frequencies, the Lamb line ($\omega = c_sk_h$), the $f$-mode ($\omega^2 = gk_h$), and the first $p$-mode are labeled.} \label{fig:AGW2_amplitude_spectral_densities}
+\end{figure*}
+
+Fig.\,\ref{fig:AGW2_amplitude_spectral_densities} shows the velocity amplitude spectral density profiles at a horizontal wavenumber cut of 2\,Mm$^{-1}$, illustrating the comparability of our data products.
+The spectral density profiles of the photospheric Doppler diagnostics are qualitatively similar in all datasets, while the \IBISCa{} profiles (purple) are broader with larger amplitudes.
+The peaks associated with the $f$-mode and $p$-modes are not visible in the \IBISCa{} profiles.
+
+Comparable with \citetalias{2023_Vesa}, we note a qualitative match between the lower photospheric diagnostics, HMI (red) and \IBISFeLowerPhot{} (gray), and the upper photospheric diagnostics, \IBISK{} (black) and \IBISFeUpperPhot{} (blue), in the evanescent regime around the $p$-modes.
+Towards the limb, the $f$-mode and first $p$-mode peak become indistinguishable in the spectral density profiles.
+This is consistent with work by \citet{1992_Deubner} showing that foreshortening affects $p$-modes towards the limb and work by \citet{2013_Zhao_Chou} showing that $p$-modes within ARs are suppressed.
+
+We observe strong velocity signals within the AGW regime for all datasets, comparable with \citetalias{2023_Vesa}, demonstrating the presence of AGWs.
+We note that at $\approx$\,1\,mHz, the velocity amplitudes are the largest for the QS limb (DS1) in line with expected theory \citet{1981_Mihalas_Toomre}.
+% However, there is no clear correlation between velocity amplitudes increasing towards the limb, likely due to the different magnetic field environments (see Table\,\ref{tab:magnetic_field_information}).
+
+\subsection{CO$^{5}$BOLD Simulation} \label{subsec:cobold_simulation}
+
+Alongside observations, we utilize a high-resolution, realistic numerical simulation of the lower solar atmosphere constructed with CO$^{5}$BOLD \citep{2012_Freytag_COBOLD}, which was described in detail in \citet{2019_Vigeesh_Roth_Steiner_Jackiewicz}.
+We analyze the Sun-v100 simulation, which features an initially uniform vertical magnetic field of 100\,G introduced into a pre-relaxed 3D hydromagnetic model.
+The domain spans 38.4\,$\times$\,38.4\,$\times$\,2.8\,Mm$^{3}$ resolved on a 480\,$\times$\,480\,$\times$\,120 grid.
+While it extends to 1.3\,Mm above the optical surface, we only analyze data for 400\,km to 500\,km above the optical surface to simulate our upper photospheric IBIS diagnostics.
+After a 1\,hr adjustment phase to incorporate the magnetic field, the simulation proceeds for 4\,hr with a cadence of 30\,s.
+
+We use the data products corresponding to the vertical velocity (v$_{\rm{z}}$) and the three components of the magnetic field (B$_{\rm{x}}$, B$_{\rm{y}}$, and B$_{\rm{z}}$).
+Although at a height of 400\,km, B$_{\rm{z}}$ spans from -176\,G to 909\,G, it remains predominantly positive, with fewer than 10$\%$ of pixels exhibiting negative values.
+As a result, the derived inclination angles from the horizontal component of the magnetic field $\left( B_{\rm{h}} = \sqrt{ B_{\rm{x}}^2 + B_{\rm{y}}^2} \right)$ and B$_{\rm{z}}$ predominantly cluster between $0^\circ$ to $90^\circ$.
+
+
+\section{Analysis and Results} \label{sec:results}
+
+
+\subsection{Vertical Velocity-Velocity Phase Differences} \label{subsec:vv_phases_differences}
+
+\begin{figure*}[hbt!]
+\gridline{\fig{26Apr2019_VV_phases_plots.png}{\textwidth}{(a) DS1 ($\mu=0.57$): IBIS--IBIS \& IBIS--HMI}}
+\gridline{\fig{06May2019_VV_phases_plots.png}{\textwidth}{(b) DS2 ($\mu=0.64$): IBIS--IBIS \& IBIS--HMI}}
+\caption{$V$\,--\,$V$ phase difference (top row) and coherence (bottom row) spectra for (left) IBIS-IBIS and (right) IBIS-HMI spectral diagnostics. In each panel, the plots are ordered by ascending separation height between diagnostics. The color scale was chosen not to oversaturate the vertically propagating wave regimes and to be comparable to \citetalias{2023_Vesa}. Limiting curves for the propagating wave regimes are shown in black, and the gray curve denotes the $f$-mode.}
+\end{figure*}
+
+\begin{figure*}[hbt!]
+\ContinuedFloat
+\captionsetup{list=off,format=cont}
+\gridline{\fig{08May2019_VV_phases_plots.png}{\textwidth}{(c) DS3 ($\mu=0.88$): IBIS--IBIS \& IBIS--HMI}}
+\gridline{\fig{09May2019_VV_phases_plots.png}{\textwidth}{(d) DS4 ($\mu=0.95$) : IBIS--IBIS \& IBIS--HMI}}
+\caption{$V$\,--\,$V$ phase difference (top row) and coherence (bottom row) spectra for (left) IBIS-IBIS and (right) IBIS-HMI spectral diagnostics. In each panel, the plots are ordered by ascending separation height between diagnostics. The color scale was chosen not to oversaturate the vertically propagating wave regimes and to be comparable to \citetalias{2023_Vesa}. Limiting curves for the propagating wave regimes are shown in black, and the gray curve denotes the $f$-mode.} \label{fig:vv_phase}
+\end{figure*}
+
+By applying a 3D Fourier transform to the Doppler velocity data and azimuthally averaging in the $k_{\rm{x}}-k_{\rm{y}}$ plane, we compute the phase and coherence spectra on a horizontal wavenumber-frequency ($k_{\rm{h}}-\nu$) diagram \citep{1974_Deubner} to separate the different wave behavior, as outlined in \citetalias{2023_Vesa}.
+The limiting curves are derived from Souffrin's acoustic-gravity wave dispersion equation, which describes the propagation of acoustic-gravity waves in an isothermal stratified atmosphere with constant radiative damping ($\tau_R$ = 233\,s) \citep{1966_Souffrin}. 
+The AGW regime is in the lower left corner at low frequencies and moderate horizontal wavenumbers.
+
+We present $V$\,--\,$V$ phase difference and coherence spectra, showing the vertical velocity perturbations, or phase lags, induced by propagating AGWs between the IBIS and HMI velocity diagnostics in Fig.\,\ref{fig:vv_phase}.
+The observed phase differences agree well with simulated results \citep{2017_Vigeesh}, Souffrin's acoustic-gravity wave theory \citep{1966_Souffrin}, and wave polarization properties \citep{1981_Mihalas_Toomre, 1982_Mihalas_Toomre}.
+While not shown, we find minimal coherence between combinations with \IBISCa{}.
+
+We detect the signature of propagating AGWs carrying energy upward (negative phase differences; $\lesssim$\,-$20^\circ$) throughout the lower solar atmosphere with corresponding coherence values greater than 0.5, regardless of the viewing geometry and magnetic field configuration.
+Remarkably, the phase differences between the IBIS diagnostics in Figs.\,\ref{fig:vv_phase}c and \,\ref{fig:vv_phase}d strongly resemble DS0 in \citetalias{2023_Vesa} despite the varying magnetic field topology. 
+Specifically, we want to highlight the phase distribution seen between \IBISFeUpperPhot{}--\IBISK{}, the highest forming velocity signals in our observations (see Subsubsect.\,\ref{subsubsec:estimated_formation_heights}).
+In both cases, these combinations showcase high-frequency AGWs while low-frequency AGWs are effectively suppressed, like in DS0.
+The distribution has a cone-like appearance, fanning out to low frequencies and smaller horizontal wavenumbers towards the limb (DS1) and with increasing average magnetic field strength (DS2).
+
+We also note several trends in the coherence spectra: (1) there is high coherence in the AGW regime, particularly for \IBISFeUpperPhot{}--\IBISK{}; (2) the coherence decreases with increasing separation height among diagnostics (e.g., Fig.\,\ref{fig:vv_phase}d); (3) the coherence decreases in environments with strong magnetic fields (e.g., Fig.\,\ref{fig:vv_phase}b); and (4) the coherence decreases towards the limb (e.g., compare Fig.\,\ref{fig:vv_phase}a and Fig.\,\ref{fig:vv_phase}d).
+
+\subsubsection{Estimated Formation Heights}  \label{subsubsec:estimated_formation_heights}
+\input{Tables/formation_heights}
+
+Average ``formation heights'' of spectral lines are contingent upon atmospheric properties and viewing geometries.
+Commonly quoted values in the literature, including those in Table\,\ref{tab:dataset_and_spectral_line_properties}, are estimates based on the atmospheric conditions present at QS disk center where the line core velocity signal samples.
+However, the properties of spectral lines (i.e., the overall shape of the line profile and average formation height) differ even at QS disk center \citep[for instance, granular vs. intergranular regimes;][]{2001_Shchukina_TrujilloBueno, 2011_kneer_Bello}, are subject to viewing geometries or center-to-limb variations \citep[e.g.,][]{1975_Altrock_November_Simon_etal, 2019_LohnerBottcher_Schmidt_Schlichenmaier_etal}, and are affected by the temperature and magnetic field strength \citep[i.e., flares, ARs, sunspot umbra;][]{2006_Norton_Graham_Ulrich_etal, 2017_QuinteroNoda, 2020_Kuridze_Mathioudakis_Heinzel_etal}.
+
+Using the method outlined in \citetalias{2023_Vesa}, we measure the estimated separation in formation height ($\Delta$\,z) between spectral diagnostics using the observed phase differences ($\Delta$\,$\phi$) detected in the propagating acoustic wave regime within the range 6–-9\,mHz and 1–-3\,Mm$^{-1}$.
+The results are shown in Table\,\ref{tab:estimated_formation_height_table}.
+
+Analysis of $\Delta$\,z between diagnostics elucidates several key findings: (1) all datasets display the same relative order for the formation heights of IBIS and HMI diagnostics; (2) $\Delta$\,z and $\Delta$\,$\phi$ decrease in magnitude towards the limb; and (3) $\Delta$\,z and $\Delta$\,$\phi$ are smaller in magnitude in ARs than in QS regions.
+
+Our analysis shows that, irrespective of the magnetic field and viewing geometry, the relative formation order of the IBIS and HMI Dopplergram diagnostics remains comparable, as seen in Fig.\,\ref{fig:vv_phase}.
+The decreasing $\Delta$\,z values towards the limb and in regions with large magnetic fields imply that collectively the average formation height of the diagnostics varies compared to QS disk center, which agrees with previous independent investigations \citep{2012_Faurobert_Ricort_Aime, 2017_QuinteroNoda}.
+Toward the limb, the line-of-sight velocities are expected to have a greater horizontal component; thus, we would expect to observe deeper into the atmosphere, which would shift up the average formation heights \citep{2012_Faurobert_Ricort_Aime}.
+In regions with large magnetic fields, we would expect the average formation heights of the diagnostics to decrease compared to their QS counterparts \citep{2003_Uitenbroek, 2017_QuinteroNoda, 2020_Vigeesh_Roth}, which in fact can be significantly smaller \citep[e.g., Fig.\,9 in][]{2017_QuinteroNoda}.
+This is reflected in our results, as seen in Table\,\ref{tab:estimated_formation_height_table}.
+DS2 has the largest average magnetic field (see Table\,\ref{tab:magnetic_field_information}) but some of the smallest $\Delta$\,z values, indicating that this magnetic environment impacted the formation heights of our diagnostics the most. 
+We also note that there is no apparent linear correlation between the estimated $\Delta$\,z values seen at DS0 and those reported at the QS limb (DS1; $\mu$ = 0.57) or the AR limb (DS2; $\mu$ = 0.64).
+
+\subsubsection{Magnetic Dispersion Relations}
+\label{subsubsec:magnetic_dispersions}
+
+To facilitate comparisons between the observed and theoretical $k_{\rm{h}}-\nu$ phase difference diagrams, we will use a more physically motivated dispersion relation for AGWs.
+The standard dispersion relations used to compare observations to theory are those of 
+\citet{1966_Souffrin, 1981_Mihalas_Toomre, 1982_Mihalas_Toomre}. These models describe the propagation of acoustic-gravity waves in an isothermal, vertically stratified medium, and in the case of \citet{1966_Souffrin, 1982_Mihalas_Toomre}, one with radiative damping. Yet these models do not take into account the effects of magnetic fields. Such effects are taken into account in the models of \citet{2006_Schunker_Cally, 2009_Newington_Cally}. The authors find that magnetic fields and, more importantly, inclined fields have significant effects on the behavior of AGWs that can depart drastically from the simplified theory. 
+
+When compared with observations, such as those in Fig.\,\ref{fig:vv_phase}, the AGW regime is found to be poorly constrained by the simplistic models. To address this, we start with the full 3D magnetohydrodynamic dispersion relation from \citet{2009_Newington_Cally}:
+
+\begin{equation}
+    \begin{split}
+        \mathcal{D} =\; & \omega^2 \omega_c^2 a_y^2 k_h^2 
+        + \left(\omega^2 - a^2 k_{\parallel}^2\right) \times \\
+        & \left[
+        \omega^4 
+        - (a^2 + c^2)\omega^2 k^2 
+        + a^2 c^2 k^2 k_{\parallel}^2 
+        + c^2 N^2 k_h^2 \right. \\
+        & \left. \quad
+        - \left(\omega^2 - a_z^2 k^2\right)\omega_c^2
+        \right],
+    \end{split}
+\label{eq:3dmhd_dispersion}
+\end{equation}
+where $\omega$ is the angular frequency, $k$ is the total wavenumber where $k=\sqrt{k_h^2 + k_z^2}$, $a$ is the Alfv\'{e}n speed where $a \propto B$ and $B$ is the magnetic field strength, $N$ is the Brunt–Väisälä frequency, $\omega_c$ is the acoustic cut-off frequency, $c_s$ is the sound speed, and $k_{\parallel}$ is the component of the wavenumber vector parallel to the magnetic field. $\mathcal{D} = 0$ in Eq.\,\ref{eq:3dmhd_dispersion} limit solutions to $k_{\rm{h}}-\nu$ space. To create a magnetized version of the phase difference diagram, Eq.\,\ref{eq:3dmhd_dispersion} must be solved explicitly for $k_z$. Expanding all terms in Eq.\,\ref{eq:3dmhd_dispersion} and rearranging, one finds the dispersion relation can be expressed in the form of a 6th order polynomial in $k_z$:
+\begin{equation}
+    c_6 k_z^6 + c_5 k_z^5 + c_4 k_z^4 + c_3 k_z^3 + c_2 k_z^2 + c_1 k_z + c_0  = 0,
+    \label{eq:6th_order_polynomial}
+\end{equation}
+where the coefficients $c_i$ are functions of the other parameters in the dispersion relation, most crucially $a\text{, }\theta\text{, and } \phi$. $\theta$ is the inclination angle of the magnetic field, and $\phi$ is the field azimuth. This equation must be solved numerically for $k_z$, and the form of Eq. \ref{eq:6th_order_polynomial} facilitates this goal. After solving for $k_z$, the phase difference between the two heights is given by:
+\begin{equation}
+    \Delta \phi = \frac{2\pi \nu \Delta z}{v_{p, z}},
+    \label{fig:phase_difference}
+\end{equation}
+where $v_{p, z} = \omega/k_z$ is the phase speed in the vertical direction and $\nu = \omega/2\pi$. Fig.\,\ref{fig:mag_diagnostic_diagrams} shows select phase difference diagrams calculated from Eq.\,\ref{fig:phase_difference} with varying values of the parameters $a\text{, }\theta\text{, and } \phi$. In all examples, the phase is found to be highly suppressed in the AGW regime. Immediately, we see remarkable qualitative similarities between the magnetized diagrams and a few observations from Fig.\,\ref{fig:vv_phase} and \citetalias{2023_Vesa}, particularly those of \IBISFeUpperPhot{}\,--\,\IBISK{}. Yet, the phase difference diagrams fail to reproduce most of the $k_{\rm{h}}-\nu$ diagrams in Fig.\,\ref{fig:vv_phase}, highlighting the limited discernibility of the effects of the magnetic field on these diagrams (to be discussed further in Sec.\,\ref{sec:discussion}).
+
+The slope of the lower boundary of the AGW regime is found to be generally correlated to the Alfv\'{e}n speed and therefore the magnetic field strength. We can derive an analytic expression for the slope of the boundary, assuming a linear form
+\begin{equation}
+    \omega = A k_z + B.
+   \label{eqn:lower_boundary}
+\end{equation}
+By visual inspection of Fig.\,\ref{fig:mag_diagnostic_diagrams}, we see that $B \approx 0$, thus we only need to solve for the coefficient $A$. We do this by substituting the linear form into Eq.\,\ref{eq:6th_order_polynomial} and solving for $A$. Since we are interested in the boundary $k_z=0$, Eq.\,\ref{eq:6th_order_polynomial} becomes
+
+\begin{equation}
+    c_0 = 0.
+    \label{eq:6th_order_polynomial_boundary}
+\end{equation}
+
+Eq.\,\ref{eq:6th_order_polynomial_boundary} has an analytic solution for $A$ in terms of $a\text{, }\theta\text{, and } \phi$. The expression is too complex to include here, but we find that it accurately fits the slope of the lower boundary in Fig.\,\ref{fig:mag_diagnostic_diagrams}. If the wedges of suppressed AGWs at low frequencies in the observations are indeed due to the presence of magnetic fields, then we may be able to use the slope of the lower boundary to crudely infer the spatiotemporal average field properties in the lower solar atmosphere. This hypothesis will be validated using the 3D MHD simulations of \citet{2017_Vigeesh, 2020_Vigeesh_Roth, 2021_Vigeesh_Roth_Steiner_Fleck} in upcoming work.
+
+\begin{figure*}[hbt!]
+\gridline{\fig{Figures/diagnostic_diagram_nc2009_01_70_50}{0.3\textwidth}{(a) $a = 0.10c_s$; $\theta = 70^{\circ}$; $\phi = 50^{\circ}$.}
+          \fig{Figures/diagnostic_diagram_nc2009_04_10_30}{0.3\textwidth}{(b) $a = 0.40c_s$; $\theta = 10^{\circ}$; $\phi = 30^{\circ}$}
+          \fig{Figures/diagnostic_diagram_nc2009_04_60_10}{0.3\textwidth}{(c) $a = 0.40c_s$; $\theta = 60^{\circ}$; $\phi = 10^{\circ}$}}
+\gridline{\fig{Figures/diagnostic_diagram_nc2009_02_70_50}{0.3\textwidth}{(d) $a = 0.20c_s$; $\theta = 70^{\circ}$; $\phi = 50^{\circ}$}
+          \fig{Figures/diagnostic_diagram_nc2009_04_50_30}{0.3\textwidth}{(e) $a = 0.40c_s$; $\theta = 50^{\circ}$; $\phi = 30^{\circ}$}
+          \fig{Figures/diagnostic_diagram_nc2009_04_60_50}{0.3\textwidth}{(f) $a = 0.40c_s$; $\theta = 60^{\circ}$; $\phi = 50^{\circ}$}}
+\gridline{\fig{Figures/diagnostic_diagram_nc2009_04_70_50}{0.3\textwidth}{(g) $a = 0.40c_s$; $\theta = 70^{\circ}$; $\phi = 50^{\circ}$}
+          \fig{Figures/diagnostic_diagram_nc2009_04_90_30}{0.3\textwidth}{(h) $a = 0.40c_s$; $\theta = 90^{\circ}$; $\phi = 30^{\circ}$}
+          \fig{Figures/diagnostic_diagram_nc2009_04_60_90}{0.3\textwidth}{(i) $a = 0.40c_s$; $\theta = 60^{\circ}$; $\phi = 90^{\circ}$}}
+\caption{Simulated $k_{\rm{h}}-\nu$ phase difference diagrams for various parameter sets, calculated using the 3D MHD dispersion relation from \citet{2009_Newington_Cally}. The leftmost column shows the effects of varying the Alfvén speed ($a$) while keeping the field inclination angle ($\theta$) and azimuth ($\phi$) fixed. The middle column varies $\theta$ while holding $a$ and $\phi$ constant, and the rightmost column varies $\phi$ with $a$ and $\theta$ held constant. Black curves denote the $k_z = 0$ boundaries in a magnetized medium, and the light gray curve represents the $f$-mode dispersion relation. All diagrams assume a height separation of $\Delta\,z = 150\,\mathrm{km}$.
+} \label{fig:mag_diagnostic_diagrams}
+\end{figure*}
+
+\subsection{Temporally Averaged Spatial Phase Weighted Coherence Maps} \label{sec:spatial_distribution_phases}
+\begin{figure*}
+    \centering
+    \includegraphics[width=\linewidth]{testfigu.png}
+    \caption{Temporally averaged spatial distributions of the phase weighted coherence between the filtered \IBISFeUpperPhot{}--\IBISK{} diagnostics within 0.7--3.1\,mHz, overlaid with unsigned magnetic field and inclination contours. Regions outside the contours correspond to QS ($|B| < 30$\,G) and predominantly horizontal fields ($75\degree \leq \gamma \leq 106\degree$). Inclination data are unavailable for DS0 and DS1.
+    Magnetic field contours: dotted hatching marks intermediate fields ($30$\,G $< |B| \leq 100$\,G); square hatching marks strong fields ($|B| > 100$\,G). Inclination contours: vertically oriented fields are hatched (stars: $0\degree \leq \gamma < 75\degree$; diagonals: $106\degree < \gamma \leq 180\degree$).}
+    \label{fig:IBIS_spatial_distribution_phases}
+\end{figure*}
+
+% While $k_{\rm{h}}-\nu$ phase difference diagrams effectively capture the vertical propagation of AGWs, they provide little insight into the observational effects of the magnetic topology on their behavior. 
+It is important to note that $k_{\rm{h}}-\nu$ phase difference diagrams effectively capture the vertical propagation of AGWs, and those simulated in Fig.\,\ref{fig:mag_diagnostic_diagrams} show sensitivity to field properties.
+However, we detect minimal observational effects of the magnetic topology on the behavior of AGWs as those in numerical simulations by \citet{2019_Vigeesh_Roth_Steiner_Jackiewicz}.
+Therefore, we employ temporally averaged spatial distributions of phase difference maps weighted by the coherence, which have been successfully used to uncover effects of the magnetic field on $p$-mode oscillations \citep[e.g.,][]{2006_Jefferies_McIntosh_etal, 2007_Vecchio_Cauzzi_Reardon_etal}.
+
+To avoid interference from the neighboring $p$-modes, we isolate AGWs by applying a 3D Gaussian filter in both frequency and wavenumber space to the velocity cubes in Fourier space, which is also tapered off well before the Lamb line (see \citetalias[][]{2023_Vesa}).
+The resulting filter is non-Gaussian with a central frequency $\nu = 1.5$\,mHz and central horizontal wavenumber $k_{\rm{h}} = 2.0$\,Mm$^{-1}$, representing where the bulk of AGWs reside (see Fig.\,\ref{fig:vv_phase}). 
+
+A 1D FFT was applied along the temporal axis of the filtered Doppler diagnostics, and the corresponding power, cross-spectra, phase, and coherence were computed.
+The median phase and coherence spectra were averaged over frequency bands associated with AGWs (0.7--3.1\,mHz) and smoothed spatially with a 1D Gaussian filter of full width at half maximum of 0.7\,Mm.
+Since we are only interested in the properties of the average magnetic field, the resulting spatial phase weighted coherence maps are compared with HMI's temporally averaged $|B_{LOS}|$ and field inclination, with contours overlaid for reference.
+Contours of $|B_{LOS}|$ were binned into QS fields ($|B|$\,$\leq$\,30\,G), intermediate fields (30\,G\,$<$\,$|B|$\,$\leq$\,100\,G), and strong fields ($|B|$\,$>$\,100\,G).
+Contours for the field inclination were binned to capture vertical ($0\degree$\,$\leq$\,$\gamma$\,$<$\,$75\degree$ and $106\degree$\,$<$\,$\gamma$\,$\leq$\,$180\degree$) and transverse (horizontal) fields ($75\degree$\,$\leq$\,$\gamma$\,$\leq$\,$106\degree$).
+
+\subsubsection{IBIS Observations} \label{subsubsec:spatial_ibis_observations}
+
+The spatial phase weighted coherence maps for the filtered \IBISFeUpperPhot{}--\IBISK{} diagnostics are seen in Fig.\,\ref{fig:IBIS_spatial_distribution_phases}.
+We focus on the \IBISFeUpperPhot{}--\IBISK{} combination because these diagnostics sample the highest atmospheric regions, where magnetic field effects on AGW propagation are expected to be most significant \citep{2019_Vigeesh_Roth_Steiner_Jackiewicz}.
+Regions outside the hatched areas represent QS fields and predominantly transverse fields.
+Due to projection effects near the limb, DS1 contours primarily reflect the longitudinal component of the field rather than the radial. 
+
+While the HMI LOS and vector magnetograms sample the low photosphere, and our spectral diagnostics probe higher regions, these measurements still offer a reasonable approximation of the magnetic environment relevant to the propagation of AGWs.
+Due to the expansion of the magnetic field with height, HMI underestimates the field strength and inclination in QS and plage regions but still captures the overall spatial distribution and orientation of magnetic structures \citep{2017_SainzDalda, 2025_Beck_Prasad_Hu_etal}.
+In strong field regions, plasma-$\beta$ is low in the photosphere, so the field is magnetically dominant \citep{2021_Wiegelmann_Sakurai}, and HMI measurements show a better correlation.
+
+Analysis of the filtered spatial phase weighted coherence maps shows that AGWs are efficiently suppressed in regions of intermediate to strong, vertically oriented fields but propagate rather unhindered in QS regions and predominantly transverse fields.
+While there are phase suppression signatures in intermediate to strong fields in DS0 (Fig.\,\ref{fig:IBIS_spatial_distribution_phases}(a)), AGWs are largely unaffected by the average QS magnetic field.
+Positive phase signatures, indicative of propagating AGWs carrying energy downwards, and phase suppression become more pronounced with increasing magnetic structure size, like in sunspots (Fig.\,\ref{fig:IBIS_spatial_distribution_phases}(c1)--(c2)) and plage regions (Fig.\,\ref{fig:IBIS_spatial_distribution_phases}(d1)--(d2)), where stronger and more spatially extended magnetic fields alter and/or inhibit AGW propagation.
+In particular, we note the striking resemblance of the propagation of AGWs in Fig.\,\ref{fig:IBIS_spatial_distribution_phases}(c1) in sensing the average magnetic field topology matching the HMI LOS magnetogram in Fig.\,\ref{fig:AGW2_reference_image}.
+
+Spatial phase weighted coherence maps for the filtered lower photospheric diagnostics primarily show minimal to no correlation with the magnetic field, indicating that AGWs are not affected by the magnetic field topology in the low photosphere as suggested by \citet{2019_Vigeesh_Roth_Steiner_Jackiewicz}.
+Additionally, analysis of the spatial power maps for the filtered diagnostics confirms power suppression or deficit in intermediate to strong, vertically oriented fields.
+
+\subsubsection{Comparison with Sun-v100} \label{subsubsec:spatial_cobold}
+\begin{figure*}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/COBOLD_spatial_phases_paper.png}
+    \caption{Temporally averaged spatial distributions of the phase weighted coherence for Sun-V100 at a height combination of 500--400\,km for AGWs within 0.7--3.1\,mHz, overlaid with calculated unsigned magnetic field and inclination contours from the lower height. These heights were chosen to replicate approximate QS formation heights of \IBISFeUpperPhot{} and \IBISK{}. Contours used are similar to those in Fig.\,\ref{fig:IBIS_spatial_distribution_phases}.}
+    \label{fig:COBOLD_spatial_distribution_phases}
+\end{figure*}
+
+We compare our observational results with the Sun-v100 CO$^{5}$BOLD simulation, which has predominantly strong vertical fields embedded in it.
+We carry out the same procedure, including filtering, to compute the temporally averaged spatial phase weighted coherence maps for simulated heights of $400$\,km and $500$\,km to match the upper atmospheric IBIS diagnostics, which can be seen in Fig.\,\ref{fig:COBOLD_spatial_distribution_phases}.
+The contours are extracted from the field at $400$\,km.
+Once again, regions outside the hatched areas represent QS fields and predominantly transverse fields.
+
+The results agree remarkably well with our observational results in Fig.\,\ref{fig:IBIS_spatial_distribution_phases}.
+In general, AGWs are efficiently suppressed or reflected in intermediate to strong, vertically oriented fields while they are allowed to propagate relatively unhindered in QS and transverse fields.
+Additionally, although not shown, the magnetic field and inclination contours at the HMI sampling height revealed a somewhat less precise but still consistent correlation with phase, reinforcing our observational findings.
+
+\subsubsection{Binned Phase Differences as a Function of Field Strength and Inclination} \label{subsubsec:binned_phases}
+
+\begin{figure*}[hbt!]
+    \centering
+    \includegraphics[width=\linewidth]{Figures/Binned_Phases.png}
+    \caption{Binned phase differences weighted by the coherence of the filtered AGWs with standard errors as a function of the (left panel) temporally averaged $|B_{LOS}|$ or $|B_z|$ and (right panel) field inclination ($\gamma$) for DS2, DS4, and Sun-v100.}
+    \label{fig:binned_phases}
+\end{figure*}
+
+The effects of the magnetic topology on the propagation of AGWs can also be seen in the binned phase differences weighted by the coherence as a function of the temporally averaged $|B_{LOS}|$ (left panel) and field inclination (right panel) for DS2, DS4, and Sun-v100, which are shown in Fig.\,\ref{fig:binned_phases}.
+The dependence of the average field strength and inclination on the propagation of AGWs in the observations qualitatively matches that shown in Sun-v100, including the magnitude of the observed median phase differences.
+
+Phase differences become increasingly positive with stronger and vertically oriented fields, while they remain predominantly negative in QS and transverse fields.
+This relationship is most evident for DS2, which matches well with the spatial distribution of phases seen in Fig.\,\ref{fig:IBIS_spatial_distribution_phases}(c1)--(c2).
+In DS4, the trend is less distinct, likely due to field inhomogeneity present in plage regions (see Fig.\,\ref{fig:IBIS_spatial_distribution_phases}(d1)--(d2)).
+
+Analysis of the field inclination as a function of field strength for DS4 shows that most negative phase differences are associated with $|B| < 160$\,G and a broad range of field azimuths.
+In DS4, AGWs can propagate upwards to some extent for a range of field inclinations, including vertically upright fields.
+However, these phase differences are smaller in magnitude than DS2 or Sun-v100, suggesting complex wave interactions with the magnetic field.
+We also note a difference in phase differences observed between outwardly and inwardly directed magnetic fields.
+
+
+\section{Discussion} \label{sec:discussion}
+
+Our analysis reveals that AGWs are modulated by the magnetic field topology, with these effects becoming increasingly apparent in regions with stronger, coherent, and organized magnetic fields, such as sunspots and plages.
+The temporally averaged, spatially resolved phase differences weighted by the coherence with the magnetic field and inclination contours superimposed as well as the binned phase differences weighted by the coherence as a function of field strength and inclination in Fig.\,\ref{fig:IBIS_spatial_distribution_phases} and Fig.\,\ref{fig:binned_phases}, respectively, reveal a trend of positive phase differences and phase suppression with increasing field strength and vertical inclination.
+These results also qualitatively match the Sun-v100 CO$^{5}$BOLD simulation in Fig\,\ref{fig:COBOLD_spatial_distribution_phases} and Fig.\,\ref{fig:binned_phases} remarkably well.
+
+In general, the observed behavior is consistent with numerical simulations, where we corroborate that AGWs are suppressed or reflected in predominantly strong, vertical fields \citep[e.g.,][]{2017_Vigeesh, 2019_Vigeesh_Roth_Steiner_Jackiewicz} but propagate largely unhindered in QS and transverse fields \citep{2009_Newington_Cally, 2021_Vigeesh_Roth_Steiner_Fleck}.
+Moreover, the striking resemblance between the AGW propagation patterns in Fig.\,\ref{fig:IBIS_spatial_distribution_phases}(c1) and the average magnetic field topology shown in the HMI magnetogram in Fig.\,\ref{fig:AGW2_reference_image} highlights the magneto-seismology diagnostic potential of AGWs for probing the average magnetic field in the lower solar atmosphere.
+
+The complexity of the interaction between AGWs and the magnetic field is evident through both observations and numerical studies.
+Mode conversion and transmission are strongly influenced by the attack angle, which is the angle between the wave vector and the field direction \citep{2006_Schunker_Cally}.
+As a result, even QS regions with highly inclined fields can cause wave reflection or conversion if the local geometry is favorable \citep[e.g.,][]{2011_Newington_Cally, 2016_Hague_Erdelyi}.
+The simulated phase difference diagrams in Fig.\,\ref{fig:mag_diagnostic_diagrams} reinforce that the behavior of AGWs is highly affected by the geometry of the magnetic field.
+
+In QS fields and areas with predominantly transverse magnetic fields, we observe significant negative phase differences, indicative of propagating AGWs carrying energy upwards.
+Observational studies indicate that transverse fields are commonly observed in the QS \citep{2008_Lites_Kubo_SocasNavarro_etal}; therefore, this behavior is not unexpected.
+The observed behavior agrees with numerical simulations showing that AGWs freely propagate upward in high plasma-$\beta$ environments, particularly transverse fields \citep[e.g.,][]{2017_Vigeesh, 2021_Vigeesh_Roth_Steiner_Fleck}.
+
+This is also consistent with the framework by \citet{2009_Newington_Cally, 2011_Newington_Cally}, which proposes that when propagating AGWs are aligned with highly inclined fields (e.g., small attack angles), they can propagate up to the equipartition level relatively unscathed.
+From there, they can transmit upward to higher atmospheric regions through a ``magnetic portal'' via mode conversion, similarly to the mechanism described by \citet{2006_Jefferies_McIntosh_etal}.
+At this point, AGWs can undergo mode conversion into field-aligned acoustic or Alfvén waves \citep{2011_Newington_Cally_Proceeding}.
+Partial mode conversion, transmission, and reflection are also probable, particularly in areas with steep temperature increases \citep{2012_Khomenko_Cally, 2012_Felipe}.
+Temperature variations in the lower solar atmosphere could also create cavities where AGWs become trapped and turn to standing modes \citep{2016_Hague_Erdelyi}.
+Therefore, suppressed and positive phase differences in Fig.\,\ref{fig:IBIS_spatial_distribution_phases} may be understood as signatures of reflected AGWs as slow modes from higher regions not sampled in our observations or the result of interference between upward and partially reflected propagating modes \citep{2009_Newington_Cally, 2012_Felipe}.
+
+Subtle but systematic differences are also present between outwardly and inwardly directed fields of comparable inclination, as seen in Fig.\,\ref{fig:binned_phases}.
+At inclinations greater than 106\textdegree, AGWs encounter increasingly unfavorable attack angles (the wave vector and field direction are antiparallel).
+This leads to suppressed transmission and enhanced reflection or mode conversion, as noted in \citet{2009_Newington_Cally, 2024_Cally_Bogdan}.
+
+In DS4, the negative phases become suppressed with increasing inclination and become positive beyond $\approx$\,150\textdegree, indicating a gradual transition from wave transmission to enhanced reflection.
+This shift likely reflects the underlying magnetic topology as observations show that the plage magnetic field is fragmented and spatially inhomogeneous, consisting of small-scale magnetic flux concentrations that expand with height into an inclined, canopy structure forming as low as 400--600\,km \citep{2015_Buehler_Lagg_Solanki_vanNoort, 2020_Morosin_delaCruzRodriguez_Vissers_Yadav}.
+Observed opposite polarity patches beneath the canopy further underscore the complexity of the plage magnetic structure, which may contribute to partial reflection and phase variability \citep{2025_Liu_etal}.
+
+In contrast, in DS2, the turning point that onsets phase suppression is more evident around 120\textdegree, where the phases increase steadily with inclination up to $\approx$\,140\textdegree.
+At inclinations below 74\textdegree, the behavior is roughly paralleled for both datasets, but the magnitude of the phases in DS2 is smaller.
+In Sun-v100, we predominantly have upright vertical fields, so the turning point of positive to negative phases is around 60\textdegree, which agrees qualitatively with our observations.
+This suggests a critical efficiency threshold for AGW propagation in different field regimes, which differs from acoustic waves \citep{2006_Schunker_Cally, 2012_Khomenko_Cally}.
+
+In all cases, increasingly horizontal fields and presumably smaller attack angles favor upward AGW propagation.
+Conversely, suppressed or positive phase differences are indicative of reflected AGWs, observed as downward propagating slow modes modified by gravity \citep{2009_Newington_Cally, 2016_Hague_Erdelyi}.
+Notably, while the AGW phase is generally reduced in regions of intermediate to strong fields, the threshold for this transition varies.
+In Sun-v100, phase reversal happens around 60\,G whereas in DS2 and DS4 it does not emerge until field strengths exceed $\geq$\,200\,G (with larger variability for DS4).
+
+Surprisingly, the influence of the average magnetic field topology is not apparent in our observed $k_h-\nu$ phase difference diagrams, as seen in Fig.\,\ref{fig:vv_phase}.
+This contradicts the numerical simulations of \citet{2017_Vigeesh, 2021_Vigeesh_Roth_Steiner_Fleck} and the observed results of \citet{2023_Kumar_Jumar_Rajaguru_Mathew_Bayanna}, who reported phase suppression, reflection, and/or scattering in different magnetic field configurations in $k_{\rm{h}}-\nu$ space.
+However, we note that the azimuthal averaging analysis by \citeauthor{2023_Kumar_Jumar_Rajaguru_Mathew_Bayanna} was performed over selected regions of interest in the overall field of view of the SDO intensity diagnostics, potentially introducing noise and local variability.
+In contrast, our results are consistent with synthetic observations by \citet{2020_Vigeesh_Roth}, who noted that the effects of the magnetic field on AGWs in $k_{\rm{h}}-\nu$ diagrams are likely not discernible.
+We speculate that this discrepancy in our observations is likely due to the spatial averaging across QS and ARs, where weak field areas dominate by area and dilute the effects of the magnetic field.
+
+Additionally, we find that some magnetized phase differences simulated in Fig.\,\ref{fig:mag_diagnostic_diagrams} show qualitative similarities to the observed data in Fig.\,\ref{fig:vv_phase}.
+In particular, the AGW phase difference distribution simulated for combinations of $a = 0.4c_s$ and $\theta \geq 50\degree$ in Fig.\,\ref{fig:mag_diagnostic_diagrams} bears a strong resemblance to the observed \IBISFeUpperPhot{}--\IBISK{} phase distribution in DS0, DS3, and DS4.
+However, it remains unclear to what extent these correspondences only reflect modifications in the field geometry on the AGW regime, as suggested by Eq.~\ref{eq:3dmhd_dispersion}. 
+Numerous numerical and simulation studies have revealed complex magnetic field and wave interactions \citep[e.g.,][]{2003_Bogdan_Carlsson_etal}, whose observational signatures in $k_{\rm{h}}-\nu$ space are poorly understood and might not be taken into account by dispersion relations.
+It is probable that in observational cases that appear consistent with theory, the spectral diagnostics probe atmospheric regions where such complex wave and field interactions (e.g., reflection, mode conversion) are less prevalent. A similar explanation was proposed in \citet{1992_Deubner, 1996_Deubner_Waldschik}, where differing phase diagrams were attributed to variations in the sampled atmospheric regions, with some dominated by reflecting structures, others not. In these cases, it may be feasible to infer average field properties from $k_{\rm{h}}-\nu$ diagrams using the analytic expressions derived in Subsec.~\ref{subsubsec:magnetic_dispersions}, which will be explored in a future study.
+
+We also sought to investigate the signatures of AGWs near the limb.
+Given their predominately transverse nature, AGWs are expected to exhibit stronger horizontal (5--6\,km\,s$^{-1}$) than vertical (1--2\,km\,s$^{-1}$) velocities; therefore, their velocity signatures are predicted to be more prominent toward the limb \citep{1981_Mihalas_Toomre}.
+\citet{1992_Deubner} reported enhanced negative phases in a QS dataset near $\mu=0.8$ between an upper photospheric and lower chromospheric diagnostic pair, which they interpreted as evidence of obliquely propagating AGWs.
+However, we do not observe similar behavior, even in DS1 ($\mu = 0.57$) shown in Fig.\,\ref{fig:vv_phase}(a)--(b), although we do note larger velocity amplitudes in Fig.\,\ref{fig:AGW2_amplitude_spectral_densities}.
+This likely reflects a combination of LOS integration effects, spectral smearing, and interference from incoherent wavefronts, which might obscure stronger phase signatures despite their strong amplitudes toward the limb.
+
+\section{Conclusion} \label{sec:conclusion}
+
+The detection of propagating AGWs for all spectral diagnostics, viewing geometries, and magnetic field configurations at the expected temporal and spatial scales in line with independent observations, numerical simulations, and theory indicates that AGWs are ubiquitous oscillations in the lower solar atmosphere.
+Our results corroborate that AGWs are influenced by the average magnetic field topology, particularly in the upper photosphere \citep{2009_Newington_Cally, 2017_Vigeesh}.
+While the $k_{\rm{h}}-\nu$ phase difference diagrams reveal no discernible effects of the magnetic field in agreement with \citet{2020_Vigeesh_Roth}, the spatially averaged and binned phase differences weighted by the coherence reveal clear effects, such as suppression and reflection.
+AGW propagation is highly affected by the magnetic field and inclination, where we observe that AGWs propagate relatively unhindered in QS and predominantly transverse fields.
+In contrast, AGWs are efficiently suppressed or reflected in intermediate to strong vertical fields.
+
+This work highlights the observational potential of using AGWs as magneto-seismology tools for probing the properties of the average magnetic field in the lower solar atmosphere.
+The magnetic field can significantly alter wave propagation and energetics, with implications for local helioseismic inferences in magnetized regions \citep{2013_Cally_Moradi, 2016_Hague_Erdelyi}.
+Therefore, multi-height diagnostics from future synoptic networks, such as the next-generation GONG network \citep[ngGONG;][]{2019_Hill_ngGONG}, especially in different field environments, will provide critical constraints on wave propagation and mode conversion.
+Additionally, high-resolution, narrowband imaging from the Visible Tunable Filter \citep[VTF;][]{2012_Kentischer} recently installed on the Daniel K. Inouye Solar Telescope \citep[DKIST;][]{2020_Rimmele_DKIST, 2021_Rast_DKIST} will also be essential for capturing the fine-scale coupling between AGWs and magnetic fields.
+
+\begin{acknowledgments}
+The IBIS datasets used in this publication were obtained with the Dunn Solar Telescope facility, operated by New Mexico State University with funding support from the National Science Foundation and the state of New Mexico. We thank the DST staff for their help in taking these observations, particularly Doug Gilliam. The HMI data used in this publication are courtesy of NASA's SDO and the HMI science team. O.V. acknowledges that this work was supported by the COFFIES DSC Cooperative Agreement 80NSSC22M0162.
+
+\textbf{funding acknowledgments here}
+\end{acknowledgments}
+
+\facilities{Dunn(IBIS), SDO(HMI)}
+
+\software{CMasher \citep{2020_JOSS_cmasher}}
+
+\bibliography{agw2}{}
+\bibliographystyle{aasjournal}
+
+
+
+
+
+\end{document}
+
+% End of file `sample631.tex'.
