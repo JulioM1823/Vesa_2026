@@ -25,7 +25,7 @@ git clone https://github.com/JulioM1823/Vesa_2025
 - Analytic manipulation of dispersion relations (symbolic simplification and algebraic rearrangement).
 - Computes the vertical wavenumber $k_z$ for all solution branches (acoustic, gravity, and MHD), including complex or imaginary roots.
 - Generates phase-difference diagrams $\Delta\phi(\nu, k_h)$ as a function of frequency $\nu$ and horizontal wavenumber $k_h$.
-- Identifies dispersion boundaries where $k_z^2 < 0$ and outputs the corresponding curves in $\nu$–$k_h$ space.
+- Identifies dispersion boundaries where $k_z^2 < 0$ and outputs the corresponding curves in $\nu-k_h$ space.
 
 ### Models Included
 
@@ -90,7 +90,7 @@ print(sp.python(roots_mt81[2]))
 print(sp.python(roots_mt81[3]))
 ```
 Latex Output:
-$$ \frac{\sqrt{2} \sqrt{4 c_{s}^{2} k_{h}^{2} + \frac{c_{s}^{2}}{H^{2}} - \frac{c_{s} \sqrt{- 64 H^{4} N^{2} k_{h}^{2} + 16 H^{4} c_{s}^{2} k_{h}^{4} + 8 H^{2} c_{s}^{2} k_{h}^{2} + c_{s}^{2}}}{H^{2}}}}{4}$$
+$\frac{\sqrt{2} \sqrt{4 c_{s}^{2} k_{h}^{2} + \frac{c_{s}^{2}}{H^{2}} - \frac{c_{s} \sqrt{- 64 H^{4} N^{2} k_{h}^{2} + 16 H^{4} c_{s}^{2} k_{h}^{4} + 8 H^{2} c_{s}^{2} k_{h}^{2} + c_{s}^{2}}}{H^{2}}}}{4}$
 
 The computed results are printed as Python code, enabling direct copy-and-paste into other scripts.
 
@@ -106,7 +106,7 @@ sqrt(2)*sqrt(4*cs**2*kh**2 + cs**2/H**2 - cs*sqrt(-64*H**4*N**2*kh**2 + 16*H**4*
 ### Generating Phase-Difference Diagrams $\left[\Delta \phi\left(\nu, k_h\right)\right]$
 The analysis notebooks and scripts use the configuration file together with `diagnostic_diagram_functions.py` to compute $k_z$ over a grid of $\nu$ and $k_h$, derive phase-speeds, and evaluate the phase-differences $\Delta\phi(\nu, k_h)$ for a given input height separation $dz$ (in kilometers). Typical workflow: set the desired parameters in `diagnostic_diagram_config.py`, then run `diagnostic_diagram_analysis.ipynb` (or instantiate the `DiagnosticDiagram` class) to produce the diagnostic diagrams.
 
-The module `diagnostic_diagram_functions.py` provides functions that accept a dispersion relation for a chosen model $\mathcal{D}$ and compute the vertical wavenumber $k_z$ by solving $\mathcal{D}=0$. Root finding is performed using `scipy.optimize.brentq`. The module also identifies the boundaries where $k_z^2<0$ (i.e., where waves are evanescent) and returns those boundaries as one-dimensional curves in $\nu$–$k_h$ space.
+The module `diagnostic_diagram_functions.py` provides functions that accept a dispersion relation for a chosen model $\mathcal{D}$ and compute the vertical wavenumber $k_z$ by solving $\mathcal{D}=0$. Root finding is performed using `scipy.optimize.brentq`. The module also identifies the boundaries where $k_z^2<0$ (i.e., where waves are evanescent) and returns those boundaries as one-dimensional curves in $\nu-k_h$ space.
 
 Below is a modified snippet from `diagnostic_diagram_analysis.ipynb` demonstrating how to use the module to generate phase-difference diagrams $\Delta\phi(\nu, k_h)$ for a range of acoustic, gravity, and magnetohydrodynamic models. It shows the typical workflow—loading configuration, computing $k_z$ and $\Delta\phi$ over the $\nu–k_h$ grid, and producing the diagnostic plots.
 
@@ -216,5 +216,5 @@ Example output for the Bunte & Bogdan (1993) model, showing results for a unifor
   
 # Author(s)
 
-- Julio M. Morales$-$[@JulioM1823](https://github.com/JulioM1823)
-- Oana Vesa$-$[@ovesa](https://github.com/ovesa)
+- Julio M. Morales-[@JulioM1823](https://github.com/JulioM1823)
+- Oana Vesa-[@ovesa](https://github.com/ovesa)
