@@ -56,7 +56,7 @@ Below is a concise list of the models included in the code, with references and 
 # Usage and Examples
 
 ### Analytic Manipulation of Dispersion Relations
-`diagnostic_diagram_analytic.ipynb` is a Jupyter notebook that collects the dispersion relations and provides tools to manipulate them symbolically with the ``SymPy`` package. It was used to rewrite the relations into forms suitable for the numerical calculation of the phase-difference diagrams, and can also be used to derive new dispersion relations or to analyze the properties of existing ones.
+`analytic.ipynb` is a Jupyter notebook that collects the dispersion relations and provides tools to manipulate them symbolically with the ``SymPy`` package. It was used to rewrite the relations into forms suitable for the numerical calculation of the phase-difference diagrams, and can also be used to derive new dispersion relations or to analyze the properties of existing ones.
 
 ```python
 # Import the relevant libraries
@@ -101,19 +101,19 @@ sqrt(2)*sqrt(4*cs**2*kh**2 + cs**2/H**2 - cs*sqrt(-64*H**4*N**2*kh**2 + 16*H**4*
 
 ### Configuration File
 
-`diagnostic_diagram_config.py` is the configuration module that defines all parameters for the available wave models. It contains physical constants, model-specific parameters, plot titles, and other settings read by the analysis code. To add or modify a model, update or add an entry in the configuration (e.g., the `params` dictionary).
+`config.py` is the configuration module that defines all parameters for the available wave models. It contains physical constants, model-specific parameters, plot titles, and other settings read by the analysis code. To add or modify a model, update or add an entry in the configuration (e.g., the `params` dictionary).
 
 ### Generating Phase-Difference Diagrams $\left[\Delta \phi\left(\nu, k_h\right)\right]$
-The analysis notebooks and scripts use the configuration file together with `diagnostic_diagram_functions.py` to compute $k_z$ over a grid of $\nu$ and $k_h$, derive phase-speeds, and evaluate the phase-differences $\Delta\phi(\nu, k_h)$ for a given input height separation $dz$ (in kilometers). Typical workflow: set the desired parameters in `diagnostic_diagram_config.py`, then run `diagnostic_diagram_analysis.ipynb` (or instantiate the `DiagnosticDiagram` class) to produce the diagnostic diagrams.
+The analysis notebooks and scripts use the configuration file together with `functions.py` to compute $k_z$ over a grid of $\nu$ and $k_h$, derive phase-speeds, and evaluate the phase-differences $\Delta\phi(\nu, k_h)$ for a given input height separation $dz$ (in kilometers). Typical workflow: set the desired parameters in `config.py`, then run `analysis.ipynb` (or instantiate the `DiagnosticDiagram` class) to produce the diagnostic diagrams.
 
-The module `diagnostic_diagram_functions.py` provides functions that accept a dispersion relation for a chosen model $\mathcal{D}$ and compute the vertical wavenumber $k_z$ by solving $\mathcal{D}=0$. Root finding is performed using `scipy.optimize.brentq`. The module also identifies the boundaries where $k_z^2<0$ (i.e., where waves are evanescent) and returns those boundaries as one-dimensional curves in $\nu-k_h$ space.
+The module `functions.py` provides functions that accept a dispersion relation for a chosen model $\mathcal{D}$ and compute the vertical wavenumber $k_z$ by solving $\mathcal{D}=0$. Root finding is performed using `scipy.optimize.brentq`. The module also identifies the boundaries where $k_z^2<0$ (i.e., where waves are evanescent) and returns those boundaries as one-dimensional curves in $\nu-k_h$ space.
 
-Below is a modified snippet from `diagnostic_diagram_analysis.ipynb` demonstrating how to use the module to generate phase-difference diagrams $\Delta\phi(\nu, k_h)$ for a range of acoustic, gravity, and magnetohydrodynamic models. It shows the typical workflow—loading configuration, computing $k_z$ and $\Delta\phi$ over the $\nu–k_h$ grid, and producing the diagnostic plots.
+Below is a modified snippet from `analysis.ipynb` demonstrating how to use the module to generate phase-difference diagrams $\Delta\phi(\nu, k_h)$ for a range of acoustic, gravity, and magnetohydrodynamic models. It shows the typical workflow—loading configuration, computing $k_z$ and $\Delta\phi$ over the $\nu–k_h$ grid, and producing the diagnostic plots.
 
 ```python
 # Import the relevant libraries
-import diagnostic_diagram_config as dd_config
-import diagnostic_diagram_functions as dd_funcs
+import config as dd_config
+import functions as dd_funcs
 import numpy as np
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
@@ -200,7 +200,7 @@ Example output for the Bunte & Bogdan (1993) model, showing results for a unifor
 
 - The code expects dispersion relations to be expressible as an $n^{\text{th}}$ order polynomial in $k_z$:
     $$c_{n}k_z^{n} + c_{n-1}k_z^{n-1} + \dots + c_0 = 0,$$
-    where each coefficient $c_n(\nu, k_h, \ldots)$ depends on $\nu$, $k_h$, and the model parameters. The pipeline uses these coefficients to compute $k_z$ for each $(\nu, k_h)$. Dispersion relations that cannot be written in this polynomial form require algebraic rearrangement (for example, via ``diagnostic_diagram_analytic.ipynb``) before they will work with the code.
+    where each coefficient $c_n(\nu, k_h, \ldots)$ depends on $\nu$, $k_h$, and the model parameters. The pipeline uses these coefficients to compute $k_z$ for each $(\nu, k_h)$. Dispersion relations that cannot be written in this polynomial form require algebraic rearrangement (for example, via ``analytic.ipynb``) before they will work with the code.
 
 - Finding the boundaries where $k_z^2 < 0$ has the same requirement: the boundary condition must be cast as an $n^{\text{th}}$ order polynomial in $\omega$,
     $$b_{n}\omega^{n} + b_{n-1}\omega^{n-1} + \dots + b_0 = 0,$$
