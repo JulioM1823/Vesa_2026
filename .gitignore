@@ -11,3 +11,12 @@ Code/oana/
 .vscode/
 Vesa 2025 et al/
 Code/diagnostic_diagram/field_measurement_tests.ipynb
+
+# Local environments and generated files
+.venv/
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Local paper workspace
+Vesa 2026 et al/
