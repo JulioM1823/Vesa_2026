@@ -2,22 +2,22 @@ from numpy import sin, cos, sqrt, pi
 
 # Use same constants as @vesaMultiheightObservationsAtmospheric2023 Figure 3
 cs = 7.8 # km/s
-dz = 150  # km
-g = 0.274 # km/s^2
+dz = 220  # km
+g  = 0.274 # km/s^2
 gamma = 5*3**(-1)
 H = 125.00 # km
 N = sqrt((g*H**(-1)) - (g**2*cs**(-2))) # Hz
-tau = 200 # s
+tau = 1 # s
 wac = cs*(2*H)**(-1) # Hz
 
 # Magnetic parameters
 B = 100 # Gauss
-epsilon = 0.0
-phi = 40.0 * pi*(180)**(-1) # deg -> rads
+epsilon = 1.0
+phi = 10.0 * pi*(180)**(-1) # deg -> rads
 theta = 80.0 * pi*(180)**(-1) # deg -> rads
 
 # Aflven velocity components
-a = 0.33*cs # km/s
+a  = 1.0*cs # km/s
 ax = a*sin(theta)*cos(phi)
 ay = a*sin(theta)*sin(phi)
 az = a*cos(theta)
@@ -41,7 +41,7 @@ params_mt1981 = {'cs': cs,
            'kz_order': 2,
         'omega_order': 4,
               'model': 'mt1981',
-              'title': '(M\&T, 1981)'}
+              'title': '(M\\&T, 1981)'}
 
 params_mt1982 = {'cs': cs, 
                  'dz': dz,
@@ -69,7 +69,7 @@ params_bunte1993 = {'a': a,
              'kz_order': 2,
           'omega_order': 8,
                 'model': 'bunte1993',
-                'title': r'$a = \,$' + f'{a*cs**(-1):.2f}' + r'$c_s$' + r', $\tau = \,$' + f'{tau:.0f}' + r's, $\epsilon = \,$' + f'{epsilon:.1f}' + ' (B\&B, 1993)'}
+                'title': r'$a = \,$' + f'{a*cs**(-1):.2f}' + r'$c_s$' + r', $\tau = \,$' + f'{tau:.0f}' + r's, $\epsilon = \,$' + f'{epsilon:.1f}' + ' (B\\&B, 1993)'}
 
 params_nc2009 = {'a': a,
                 'ax': ax,

@@ -106,7 +106,7 @@ sqrt(2)*sqrt(4*cs**2*kh**2 + cs**2/H**2 - cs*sqrt(-64*H**4*N**2*kh**2 + 16*H**4*
 ### Generating Phase-Difference Diagrams $\left[\Delta \phi\left(\nu, k_h\right)\right]$
 The analysis notebooks and scripts use the configuration file together with `functions.py` to compute $k_z$ over a grid of $\nu$ and $k_h$, derive phase-speeds, and evaluate the phase-differences $\Delta\phi(\nu, k_h)$ for a given input height separation $dz$ (in kilometers). Typical workflow: set the desired parameters in `config.py`, then run `analysis.ipynb` (or instantiate the `DiagnosticDiagram` class) to produce the diagnostic diagrams.
 
-The module `functions.py` provides functions that accept a dispersion relation for a chosen model $\mathcal{D}$ and compute the vertical wavenumber $k_z$ by solving $\mathcal{D}=0$. Root finding is performed using `scipy.optimize.brentq`. The module also identifies the boundaries where $k_z^2<0$ (i.e., where waves are evanescent) and returns those boundaries as one-dimensional curves in $\nu-k_h$ space.
+The module `functions.py` provides functions that accept a dispersion relation for a chosen model $\mathcal{D}$ and compute the vertical wavenumber $k_z$ by solving $\mathcal{D}=0$. Vertical-wavenumber roots are solved as complex polynomial roots and then assigned to continuous branches across the full $\nu-k_h$ grid. The module also identifies the boundaries where $k_z^2<0$ (i.e., where waves are evanescent) and returns those boundaries as one-dimensional curves in $\nu-k_h$ space using `scipy.optimize.brentq`.
 
 Below is a modified snippet from `analysis.ipynb` demonstrating how to use the module to generate phase-difference diagrams $\Delta\phi(\nu, k_h)$ for a range of acoustic, gravity, and magnetohydrodynamic models. It shows the typical workflow—loading configuration, computing $k_z$ and $\Delta\phi$ over the $\nu–k_h$ grid, and producing the diagnostic plots.
 
@@ -146,9 +146,9 @@ diagram_class = dd_funcs.DiagnosticDiagram(kh_grid, omega_grid, params[model])
 rad_to_mHz = (2*pi)**(-1)*1e3  # rad/s to mHz
 inv_km_to_Mm = 1e3  # km^-1 to Mm^-1
 
-# Calculate the bounds where kz^2 < 0 and calculate kz
+# Calculate the bounds where kz^2 < 0 and calculate tracked kz branches
 nu = np.array(Parallel(n_jobs = -1, backend = 'loky')(delayed(diagram_class.omega_solve)(i) for i in kh))*rad_to_mHz
-kz = np.stack(Parallel(n_jobs = -1, backend = 'loky')(delayed(diagram_class.kz_solve)(i) for i in kh), axis = 1)
+kz, kz_tracking = diagram_class.kz_solve_grid(return_diagnostics=True)
 
 # Calculate grids and f-mode dispersion for plotting
 kh_plot  = kh_grid*inv_km_to_Mm # Mm^-1
@@ -164,7 +164,7 @@ interval = ZScaleInterval()
 
 # Plot the phase differences
 for i in range(0, params[model]['kz_order']):
-    phase_difference = np.nan_to_num(delta_phi[i]*180*pi**(-1), nan = 0.0, posinf=0.0, neginf=0.0) # degrees
+    phase_difference = np.real(np.nan_to_num(delta_phi[i]*180*pi**(-1), nan = 0.0, posinf=0.0, neginf=0.0)) # degrees
     if np.all(np.isclose(phase_difference, 0.0, rtol=1e-09, atol=1e-09)):
         plt.close()
         continue
@@ -189,6 +189,90 @@ for i in range(0, params[model]['kz_order']):
     break  # Remove this line to plot all kz modes
 ```
 
+### Inspecting $k_z$ Branch Tracking
+
+`kz_solve_grid()` returns roots after continuity-based branch assignment across the full $\nu-k_h$ grid. After the initial spanning-tree assignment, a global pair-swap synchronization pass relabels connected regions where two branches were exchanged across an artificial cut. A second identity-refinement pass tests larger candidate region swaps against a global first- and second-difference objective in both complex $k_z$ and $\mathrm{Re}(k_z)$, which is proportional to $\Delta\phi$. Candidate swaps are applied only when they improve the global objective; otherwise close-root regions are exposed as true near-degeneracies/crossings. The raw root order and pre-swap roots are still available in the diagnostics dictionary so the tracked branches can be compared against the numerical solver ordering. The diagnostics also separate branch-label jumps from polynomial-solve problems using root-set jump maps, assignment confidence/cost, root separation, and normalized polynomial residuals:
+
+```python
+kz, kz_tracking = diagram_class.kz_solve_grid(return_diagnostics=True)
+
+# Plot every tracked branch on one shared color scale.
+fig, axes = diagram_class.plot_kz_branches(
+    kz,
+    component='real',
+    diagnostics=kz_tracking,
+    robust=False
+)
+
+# For custom per-branch figures, compute the color limits once and reuse them.
+kz_plot = diagram_class.kz_plot_values(
+    kz,
+    component='real',
+    diagnostics=kz_tracking
+)
+kz_vmin, kz_vmax = diagram_class.kz_color_limits(
+    kz,
+    component='real',
+    diagnostics=kz_tracking,
+    robust=False
+)
+
+# Compare raw solver ordering against tracked ordering and show suspicious regions.
+fig, axes = diagram_class.plot_kz_tracking_diagnostics(
+    kz_tracking['raw_roots'],
+    kz,
+    kz_tracking
+)
+
+print(kz_tracking['smoothness'])
+print('Suspicious pixels:', np.count_nonzero(kz_tracking['uncertain_mask']))
+print('Pre-swap branch-jump excess pixels:', np.count_nonzero(kz_tracking['pre_swap_branch_jump_excess_mask']))
+print('Post-swap branch-jump excess pixels:', np.count_nonzero(kz_tracking['branch_jump_excess_mask']))
+print('Flagged plot-artifact pixels:', np.count_nonzero(kz_tracking['plot_suspicious_mask']))
+print('Branch-swap correction:', {
+    key: value for key, value in kz_tracking['branch_swap_correction'].items()
+    if key != 'pair_stats'
+})
+print('Branch-identity refinement:', {
+    key: value for key, value in kz_tracking['branch_identity_refinement'].items()
+    if key != 'pair_stats'
+})
+print('Nearly degenerate pixels:', np.count_nonzero(kz_tracking['degenerate_mask']))
+print('Close branch-pair pixels:', np.count_nonzero(kz_tracking['branch_close_mask']))
+print('Topological branch-cut pixels:', np.count_nonzero(kz_tracking['topological_branch_cut_mask']))
+print('Unresolved branch-jump pixels:', np.count_nonzero(kz_tracking['unresolved_branch_jump_mask']))
+print('High-residual solve pixels:', np.count_nonzero(kz_tracking['solver_instability_mask']))
+print('Worst polynomial residual:', np.nanmax(kz_tracking['max_root_residual']))
+
+# Before/after kz and phase maps for selected affected branches.
+fig, axes = diagram_class.plot_branch_swap_diagnostics(
+    kz,
+    kz_tracking,
+    branches=[1, 2, 4],
+    dz=dd_config.dz
+)
+
+# Inspect whether a suspected large-scale boundary is a real branch swap.
+# branch_pair uses one-based branch numbers; omit it to inspect the closest pair.
+fig, axes = diagram_class.plot_branch_identity_diagnostics(
+    kz,
+    kz_tracking,
+    branch_pair=(1, 4),
+    dz=dd_config.dz
+)
+
+# Distinguish numerical artifacts from unavoidable root-sheet branch cuts.
+fig, axes = diagram_class.plot_branch_topology_diagnostics(
+    kz,
+    kz_tracking,
+    branch=2,
+    dz=dd_config.dz
+)
+
+# Optional line cuts through a suspicious region.
+fig, ax = diagram_class.plot_kz_line_cut(kz, axis='kh', index=100, component='real')
+```
+
 Example output for the Bunte & Bogdan (1993) model, showing results for a uniform horizontal magnetic field (Alfvén speed $a$) and radiative damping time $\tau$:
 <p align="center">
     <img src="image.png" alt="Bunte & Bogdan (1993) Diagnostic Diagram">
@@ -196,7 +280,7 @@ Example output for the Bunte & Bogdan (1993) model, showing results for a unifor
 
 # Known issues and limitations
 
-- Solutions for $k_z$ (and therefore $\Delta\phi$) are not always smoothly varying with respect to $k_h$ and $\nu$. This behavior likely arises from the mathematical structure of the dispersion relations and the numerical root-finding methods. It is a visualization artifact and does not change the physical interpretation of the results.
+- Raw solver output for $k_z$ is not branch ordered. Use `kz_solve_grid()` for continuity-tracked branches and inspect `kz_tracking['uncertain_mask']`, `kz_tracking['branch_close_mask']`, and `kz_tracking['branch_degenerate_mask']` where the assignment is close to a degeneracy or crossing. The branch-swap and identity-refinement passes should drive `kz_tracking['unresolved_branch_jump_mask']` to zero; if any pixels remain in `kz_tracking['plot_suspicious_mask']`, pass `diagnostics=kz_tracking, mask_suspicious=True` so they are visibly flagged instead of appearing as branch structure. If sharp features remain but `plot_suspicious_mask` is empty, inspect `kz_tracking['topological_branch_cut_mask']` and `kz_tracking['monodromy_mask']`; these mark root-sheet branch cuts caused by non-identity local root permutations around a plaquette, not polynomial-solver failures.
 
 - The code expects dispersion relations to be expressible as an $n^{\text{th}}$ order polynomial in $k_z$:
     $$c_{n}k_z^{n} + c_{n-1}k_z^{n-1} + \dots + c_0 = 0,$$
@@ -210,7 +294,7 @@ Example output for the Bunte & Bogdan (1993) model, showing results for a unifor
 
 # Future improvements
 
-- Replace or augment the current root-finding strategy with more robust numerical methods to improve smoothness and stability of $k_z$ and $\Delta\phi$ across the grid.
+- Further tune branch-tracking thresholds for model-specific degeneracies and use the diagnostic masks to separate true crossings from numerical assignment uncertainty.
 
 - Remove the reliance on a particular polynomial form by generalizing the solver to accept a wider class of dispersion relations directly.
   
