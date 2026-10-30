@@ -53,6 +53,10 @@ Below is a concise list of the models included in the code, with references and 
 - [Souffrin (1966)](https://ui.adsabs.harvard.edu/abs/1967ARA&A...5...67S)  
     - Model: Standard adiabatic acoustic–gravity wave model
 
+- Slow-fast mode
+    - Parameters: $a$, $c_s$, $\theta$, and $\phi$
+    - A quartic $\omega$ equation with two positive-frequency boundary slots (`omega_order = 2`) and `kz_order = 4`
+
 # Usage and Examples
 
 ### Analytic Manipulation of Dispersion Relations
@@ -106,7 +110,7 @@ sqrt(2)*sqrt(4*cs**2*kh**2 + cs**2/H**2 - cs*sqrt(-64*H**4*N**2*kh**2 + 16*H**4*
 ### Generating Phase-Difference Diagrams $\left[\Delta \phi\left(\nu, k_h\right)\right]$
 The analysis notebooks and scripts use the configuration file together with `functions.py` to compute $k_z$ over a grid of $\nu$ and $k_h$, derive phase-speeds, and evaluate the phase-differences $\Delta\phi(\nu, k_h)$ for a given input height separation $dz$ (in kilometers). Typical workflow: set the desired parameters in `config.py`, then run `analysis.ipynb` (or instantiate the `DiagnosticDiagram` class) to produce the diagnostic diagrams.
 
-The module `functions.py` provides functions that accept a dispersion relation for a chosen model $\mathcal{D}$ and compute the vertical wavenumber $k_z$ by solving $\mathcal{D}=0$. Vertical-wavenumber roots are solved as complex polynomial roots and then assigned to continuous branches across the full $\nu-k_h$ grid. The module also identifies the boundaries where $k_z^2<0$ (i.e., where waves are evanescent) and returns those boundaries as one-dimensional curves in $\nu-k_h$ space using `scipy.optimize.brentq`.
+The module `functions.py` provides functions that accept a dispersion relation for a chosen model $\mathcal{D}$ and compute the vertical wavenumber $k_z$ by solving $\mathcal{D}=0$. Vertical-wavenumber roots are solved as complex polynomial roots and then assigned to continuous branches across the full $\nu-k_h$ grid. Dispersion-boundary frequencies are likewise solved directly as complete complex root sets and continuity-tracked along $k_h$; only nonnegative, numerically real roots inside the sampled frequency interval are exposed as plotted boundaries.
 
 Below is a modified snippet from `analysis.ipynb` demonstrating how to use the module to generate phase-difference diagrams $\Delta\phi(\nu, k_h)$ for a range of acoustic, gravity, and magnetohydrodynamic models. It shows the typical workflow—loading configuration, computing $k_z$ and $\Delta\phi$ over the $\nu–k_h$ grid, and producing the diagnostic plots.
 
@@ -120,7 +124,6 @@ import matplotlib.pyplot as plt
 import matplotlib
 import cmasher as cmr
 from math import pi
-from joblib import Parallel, delayed
 from astropy.visualization import ZScaleInterval
 from astropy.io import fits
 from matplotlib import rc
@@ -146,9 +149,12 @@ diagram_class = dd_funcs.DiagnosticDiagram(kh_grid, omega_grid, params[model])
 rad_to_mHz = (2*pi)**(-1)*1e3  # rad/s to mHz
 inv_km_to_Mm = 1e3  # km^-1 to Mm^-1
 
-# Calculate the bounds where kz^2 < 0 and calculate tracked kz branches
-nu = np.array(Parallel(n_jobs = -1, backend = 'loky')(delayed(diagram_class.omega_solve)(i) for i in kh))*rad_to_mHz
+# Calculate tracked omega-boundary and kz branches over their complete grids
+omega_boundaries, omega_tracking = diagram_class.omega_solve_grid(return_diagnostics=True)
 kz, kz_tracking = diagram_class.kz_solve_grid(return_diagnostics=True)
+omega_boundaries_by_kz, omega_kz_tracking = diagram_class.associate_omega_boundaries_with_kz(
+    omega_boundaries, kz, return_diagnostics=True
+)
 
 # Calculate grids and f-mode dispersion for plotting
 kh_plot  = kh_grid*inv_km_to_Mm # Mm^-1
@@ -171,13 +177,13 @@ for i in range(0, params[model]['kz_order']):
     # Make the plot
     plt.figure(figsize=(7, 7))
     plt.plot(kh_plot[0], fmode_nu, 'gray')
-    if (model == 'nc2009'):
-        plt.plot(kh_plot[0], kh*(dd_config.ax*rad_to_mHz), color='black', linestyle='-')
     vmin, vmax = -80, 80
     plt.pcolormesh(kh_plot, nu_plot, phase_difference, cmap=cmr.fusion, shading="auto", norm=mcolors.TwoSlopeNorm(vmin=vmin, vcenter=0.0, vmax=vmax), rasterized=True)
     plt.colorbar(label=colorbar_label_phase)
-    for j in range(0, params[model]['omega_order']):
-        plt.plot(kh_plot[0], nu[:, j], 'k-', markersize=3)
+    # Overlay only boundary curves stitched to this tracked kz/phase family.
+    diagram_class.plot_omega_boundaries_for_kz_branch(
+        plt.gca(), omega_boundaries_by_kz, i
+    )
     plt.title(f'Diagnostic Diagram for {diagram_class.model.upper()}')
     plt.xlabel(wavenumber_label)
     plt.ylabel(frequency_label)
@@ -189,9 +195,40 @@ for i in range(0, params[model]['kz_order']):
     break  # Remove this line to plot all kz modes
 ```
 
+### Inspecting $\omega$ Boundary Tracking
+
+`omega_solve_grid()` constructs coefficients with `omega_coefficients()`, solves every polynomial directly, matches adjacent complex root sets with one-to-one Hungarian assignment, and propagates labels along the physical $k_h$ coordinates. Its public array has shape `(n_kh, omega_order)` and contains only nonnegative, numerically real roots in the sampled frequency interval; unavailable values are `NaN`. Complete negative and complex roots remain in `omega_tracking['raw_roots']` and `omega_tracking['tracked_roots']`. Reduced degree, failed solves, reinitializations, degeneracies, ambiguous assignments, and normalized residuals are reported separately. The old `omega_solve(kh)` remains only as a zero-filled, single-$k_h$ compatibility method.
+
+Before overlaying these curves on a phase-difference panel, call `associate_omega_boundaries_with_kz()`. At each positive boundary point it verifies an exact $k_z=0$ root, continues that root through eight configurable substeps to the strict sampled-frequency rows below and above the boundary, and matches both endpoint root sets to the global labels returned by `kz_solve_grid()`. Lower/upper label disagreement is retained and flagged rather than hidden by interpolating or sorting solver slots.
+
+The pointwise labels can hand off repeatedly near a crossing, while the same continuous omega curve remains a boundary of a global phase family. The default association therefore stitches a curve across each connected finite $k_h$ interval only after three consecutive support samples (also checked using physical $k_h$ span); isolated near-origin contacts are rejected. Missing/NaN gaps are never bridged, and a zero-frequency endpoint is included only as the limit of an adjacent qualified curve. The local two-sided evidence, stitched pixels, endpoint extensions, support counts/spans, component membership, confidence, and ambiguity masks are returned in `omega_kz_tracking`. Both the continuation substeps and support thresholds are configurable.
+
+For the configured NC2009 case this gives the intended mapping: phase branches 1–2 receive no omega curves; branches 3–4 receive the middle and upper curves; branch 5 receives the middle curve; and branch 6 receives only the lower coupled boundary. The separate $a_xk_h$ approximation is not plotted.
+
+![Omega curves associated with the correct NC2009 phase branches](Code/diagnostic_diagram/omega_kz_branch_overlays.png)
+
+```python
+omega_boundaries, omega_tracking = diagram_class.omega_solve_grid(
+    return_diagnostics=True
+)
+kz, kz_tracking = diagram_class.kz_solve_grid(return_diagnostics=True)
+omega_boundaries_by_kz, omega_kz_tracking = diagram_class.associate_omega_boundaries_with_kz(
+    omega_boundaries, kz, return_diagnostics=True
+)
+
+fig, axes = diagram_class.plot_omega_tracking_comparison(
+    omega_boundaries,
+    omega_tracking
+)
+```
+
+![Legacy, raw, tracked, and flagged omega-boundary comparison](Code/diagnostic_diagram/omega_tracking_comparison.png)
+
 ### Inspecting $k_z$ Branch Tracking
 
 `kz_solve_grid()` returns roots after continuity-based branch assignment across the full $\nu-k_h$ grid. After the initial spanning-tree assignment, a global pair-swap synchronization pass relabels connected regions where two branches were exchanged across an artificial cut. A second identity-refinement pass tests larger candidate region swaps against a global first- and second-difference objective in both complex $k_z$ and $\mathrm{Re}(k_z)$, which is proportional to $\Delta\phi$. Candidate swaps are applied only when they improve the global objective; otherwise close-root regions are exposed as true near-degeneracies/crossings. The raw root order and pre-swap roots are still available in the diagnostics dictionary so the tracked branches can be compared against the numerical solver ordering. The diagnostics also separate branch-label jumps from polynomial-solve problems using root-set jump maps, assignment confidence/cost, root separation, and normalized polynomial residuals:
+
+The point solver now rescales $k_z=R y$ before finding roots and removes only exactly zero leading coefficients. `effective_degree` and `degree_reduced_mask` distinguish physical degree changes from `solve_failed_mask`. `root_residuals` use the actual magnitudes of polynomial terms, and `root_condition_estimates` flag roots sensitive to coefficient perturbations; a small residual alone is not a bound on root error. For selected sensitive points, `kz_solve_grid(high_precision_validation=True)` independently resolves the root sets with `mpmath` and reports agreement or failure in `high_precision_validation`. This check requires `mpmath` and can be slow. Branch identities at degeneracies still require physical interpretation.
 
 ```python
 kz, kz_tracking = diagram_class.kz_solve_grid(return_diagnostics=True)
@@ -277,6 +314,30 @@ Example output for the Bunte & Bogdan (1993) model, showing results for a unifor
 <p align="center">
     <img src="image.png" alt="Bunte & Bogdan (1993) Diagnostic Diagram">
 </p>
+
+# Interactive Bokeh application
+
+An interactive Bokeh server application is available for all six requested
+dispersion families. It reuses the existing root solving, continuity tracking,
+boundary verification/stitching, and phase-difference calculations.
+
+```bash
+.venv/bin/pip install -r requirements.txt
+.venv/bin/bokeh serve --show Code/diagnostic_diagram/bokeh_app
+```
+
+The application uses model-local all-slider controls, live debounced Python
+callbacks, cached identical evaluations, selectable `k_z`/phase views, verified
+boundary overlays, numerical-warning masks, and interactive hover/pan/zoom/reset
+tools. Every tracked solution is shown simultaneously in a linked 2-, 4-, or
+6-panel grid, and one model calculation updates all of its panels. A robust
+full-sheet complex-`k_z` assignment stabilizes panel identity between parameter
+changes without altering the solver's pointwise roots. Its 700×700 plots use the
+same labels, serif styling, black boundary overlays, `cmasher.fusion` phase
+colormap, and normalization as the notebook pipeline. See
+[`Code/diagnostic_diagram/INTERACTIVE_APP.md`](Code/diagnostic_diagram/INTERACTIVE_APP.md)
+for the complete control list, performance measurements, validation command,
+and current scientific limitations.
 
 # Known issues and limitations
 
